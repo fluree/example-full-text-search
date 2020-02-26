@@ -1,68 +1,81 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Fluree Recipe Example
 
-## Available Scripts
+This mini-app uses Fluree's full-text capabilities to quickly through 25,000 recipes.
 
-In the project directory, you can run:
+Features demonstrated: [full-text search](https://docs.flur.ee/docs/database-setup/database-settings#language).
 
-### `npm start`
+![Full Text App](public/fullText.gif)
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Get Started
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+1. `Start Fluree`
 
-### `npm test`
+Download and unzip this [Fluree packet](https://fluree-examples.s3.amazonaws.com/fluree-recipe-packet.zip). The packet contains Fluree, version 0.13.0, as well as a prepopulated database of recipes. All recipes are taken from [Eight Portions](https://eightportions.com/datasets/Recipes/#fn:1).
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Navigate to the folder where you downloaded the packet, and run `./fluree_start.sh`. If you have Java 8+ installed, this should launch Fluree, and a Admin Console will be available for you to explore at `http://localhost:8080`. `resources/example_queries.js` has example queries you can test out directly in the Admin Console.
 
-### `npm run build`
+2. `Start the App`
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+git clone https://github.com/fluree/fluree-recipe-example.git
+```
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+```
+cd fluree-recipe-example
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+npm install
+```
 
-### `npm run eject`
+```
+npm start
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### How Does it Work
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+#### Full-Text Search
+Fluree uses Apache Lucene to power our full-text search capabilities. Time-travel is NOT supported in full-text search, so search results only reflect the current Fluree ledger.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Full-text search is set to English, by default. We support [10 different languages](https://docs.flur.ee/docs/database-setup/database-settings#language) in full-text search, including Chinese, Hindi, and Russian. 
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+In order to enable full-text search on a predicate, `_predicate/fullText` has to be equal to true. For example, `recipe/description` has full-text search enabled:
 
-## Learn More
+```
+{
+    "_id": "_predicate",
+    "name": "recipe/description",
+    "type": "string",
+    "fullText": true
+}
+```
+You can see the full schema in `./resources/schema.json`.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+#### Query 
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+The app is based on a single query:
 
-### Code Splitting
+```
+{
+    "select":   { "?recipe": [ { "*" : {"_compact":true }}]},
+    "where":    [["?recipe","fullText:recipe","apples"]],
+    "limit":    10,
+    "offset":   0
+}
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+The search term (in the example above, `apples`) changes depending on the query, and the `offset` changes to support pagination.
 
-### Analyzing the Bundle Size
+You can try out this and other queries by going to `http://localhost:8080`. `resources/example_queries.js` has example queries you can test out directly in the Admin Console.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+### Resources
 
-### Making a Progressive Web App
+To see more example projects, visit our [example repo](https://github.com/fluree/examples). 
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+Check out our entire [documentation](https://docs.flur.ee/) or jump directly to the section on [full-text search](https://docs.flur.ee/docs/database-setup/database-settings#language).
 
-### Advanced Configuration
+You can also engage with us via email, `support@flur.ee`.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+Or by [Slack](https://launchpass.com/flureedb).
 
-### Deployment
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify

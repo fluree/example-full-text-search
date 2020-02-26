@@ -1,0 +1,22 @@
+[{
+    "_id": "_collection",
+    "name": "recipe"
+},
+{
+    "_id": "_predicate",
+    "name": "recipe/id",
+    "type": "string",
+    "fullText": true
+},
+{
+    "_id": "_predicate",
+    "name": "recipe/description",
+    "type": "string",
+    "fullText": true
+},
+{
+    "_id": "_predicate",
+    "name": "recipe/ingredients",
+    "type": "string",
+    "fullText": true
+}]
