@@ -68,6 +68,8 @@ The search term (in the example above, `apples`) changes depending on the query,
 
 You can try out this and other queries by going to `http://localhost:8080`. `resources/example_queries.js` has example queries you can test out directly in the Admin Console.
 
+![Full Text Queries](public/queries.gif)
+
 ### Resources
 
 To see more example projects, visit our [example repo](https://github.com/fluree/examples). 
